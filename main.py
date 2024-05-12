@@ -82,6 +82,15 @@ class AutoClose(Extension):
         "config",
         sub_cmd_description="設定無活躍的定義",
     )
+    async def try_close_every_thread(self, ctx: SlashContext):
+        console.log('try_close_every_thread')
+        for thread in ctx.guild.threads:
+            await self.try_close_thread(thread)
+
+    @module_base.subcommand(
+        "config",
+        sub_cmd_description="設定無活躍的定義",
+    )
     @slash_option(
         name="inactive_time",
         description="一個帖子被視為不活躍，其最新的訊息至少需要存在的時間",
