@@ -133,7 +133,7 @@ class AutoClose(Extension):
         
         if not should_archive:
             last_message = thread.get_message(thread.last_message_id)
-            if last_message.timestamp:
+            if last_message and last_message.timestamp:
                 last_active_time = last_message.timestamp.timestamp()
                 current_time = time()
                 console.log(f'last active time: {last_active_time}')
