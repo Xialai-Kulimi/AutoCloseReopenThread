@@ -113,7 +113,7 @@ class AutoClose(Extension):
             console.log('thread is locked')
             return
     
-        config = await load_config(thread.guild_id)
+        config = await load_config(thread.parent_channel.guild.id)
         
         if thread.last_message_id is None or \
             thread.get_message(thread.last_message_id).timestamp.timestamp() + config.inactive_time < time():
