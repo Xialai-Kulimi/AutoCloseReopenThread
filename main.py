@@ -33,7 +33,7 @@ from interactions import (
     OptionType
 )
 from time import time
-from interactions.api.events import Startup, ThreadUpdate
+from interactions.api.events import Startup, ThreadUpdate, ExtensionLoad
 from pydantic import BaseModel
 import aiofiles
 
@@ -146,10 +146,12 @@ class AutoClose(Extension):
         await self.try_close_every_thread()
         
 
-    @listen(Startup)
-    async def on_startup(self, event: Startup):
-        console.log('on_startup')
-        await self.try_close_every_thread()
+    @listen(ExtensionLoad)
+    async def on_load(self, event: ExtensionLoad):
+        if event.extension == self:
+            console.log('on_load')
+            self.on_every_five_minute.start()
+            await self.try_close_every_thread()
         
 
     @listen(ThreadUpdate)
