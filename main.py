@@ -124,12 +124,26 @@ class AutoClose(Extension):
     
         config = await load_config(thread.parent_channel.guild.id)
         
-        console.log(f'last active time: {thread.get_message(thread.last_message_id).timestamp.timestamp()}')
-        console.log(f'current time: {time()}')
-        if thread.last_message_id is None or \
-            thread.get_message(thread.last_message_id).timestamp.timestamp() + config.inactive_time < time():
+        
+        
+        
+        should_archive = False
+        if thread.last_message_id is None:
+            should_archive = True
+        
+        if not should_archive:
+            last_message = thread.get_message(thread.last_message_id)
+            if last_message.timestamp:
+                last_active_time = last_message.timestamp.timestamp()
+                current_time = time()
+                console.log(f'last active time: {last_active_time}')
+                console.log(f'current time: {current_time}')
+                if last_active_time + config.inactive_time < current_time:
+                    should_archive = True
+        
+        if should_archive:
             console.log(f'thread: {thread} is inactive')
-            await thread.edit(archived=True)
+            await thread.edit(archived=True, reason="由於長時間不活躍，因此關閉此討論串")
             
     
     async def try_close_every_thread(self):
@@ -140,7 +154,7 @@ class AutoClose(Extension):
                 console.log(f'processing thread: {thread}')
                 await self.try_close_thread(thread)
         
-    @Task.create(IntervalTrigger(seconds=5))
+    @Task.create(IntervalTrigger(minutes=5))
     async def on_every_five_minute(self):
         console.log('on_every_five_minute')
         await self.try_close_every_thread()
