@@ -115,10 +115,11 @@ class AutoClose(Extension):
     
         config = await load_config(thread.parent_channel.guild.id)
         
+        console.log(f'last active time: {thread.get_message(thread.last_message_id).timestamp.timestamp()}')
+        console.log(f'current time: {time()}')
         if thread.last_message_id is None or \
             thread.get_message(thread.last_message_id).timestamp.timestamp() + config.inactive_time < time():
             console.log(f'thread: {thread} is inactive')
-            console.log(f'last active time: {thread.get_message(thread.last_message_id).timestamp.timestamp()}')
             await thread.edit(archived=True)
             
     
