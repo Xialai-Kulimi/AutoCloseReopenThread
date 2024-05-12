@@ -107,7 +107,7 @@ class AutoClose(Extension):
             return
         if thread.archived:
             return
-        if thread.is_locked:
+        if thread.locked:
             return
     
         config = await load_config(thread.guild_id)
