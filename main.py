@@ -79,7 +79,7 @@ class AutoClose(Extension):
     
     
     @module_base.subcommand(
-        "config",
+        "try_close_every_thread",
         sub_cmd_description="設定無活躍的定義",
     )
     async def try_close_every_thread(self, ctx: SlashContext):
