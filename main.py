@@ -103,34 +103,46 @@ class AutoClose(Extension):
     
 
     async def try_close_thread(self, thread: ThreadChannel):
+        console.log('try_close_thread')
         if not isinstance(thread, GuildPublicThread):
             return
         if thread.archived:
+            console.log('thread is archived')
             return
         if thread.locked:
+            console.log('thread is locked')
             return
     
         config = await load_config(thread.guild_id)
         
         if thread.last_message_id is None or \
             thread.get_message(thread.last_message_id).timestamp.timestamp() + config.inactive_time < time():
+            console.log(f'thread: {thread} is inactive')
+            console.log(f'last active time: {thread.get_message(thread.last_message_id).timestamp.timestamp()}')
             await thread.edit(archived=True)
+            
     
     async def try_close_every_thread(self):
+        console.log('try_close_every_thread')
         for guild in self.bot.guilds:
+            console.log(f'processing guild: {guild}')
             for thread in guild.threads:
+                console.log(f'processing thread: {thread}')
                 await self.try_close_thread(thread)
         
     @Task.create(IntervalTrigger(minutes=5))
     async def on_every_five_minute(self):
+        console.log('on_every_five_minute')
         await self.try_close_every_thread()
         
 
     @listen(Startup)
     async def on_startup(self, event: Startup):
+        console.log('on_startup')
         await self.try_close_every_thread()
         
 
     @listen(ThreadUpdate)
     async def on_thread_update(self, event: ThreadUpdate):
+        console.log('on_thread_update')
         await self.try_close_thread(event.thread)
