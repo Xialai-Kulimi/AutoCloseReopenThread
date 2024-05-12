@@ -140,6 +140,8 @@ class AutoClose(Extension):
                 console.log(f'current time: {current_time}')
                 if last_active_time + config.inactive_time < current_time:
                     should_archive = True
+            else:
+                should_archive = True
         
         if should_archive:
             console.log(f'thread: {thread} is inactive')
