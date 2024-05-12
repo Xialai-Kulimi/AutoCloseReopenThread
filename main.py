@@ -80,7 +80,7 @@ class AutoClose(Extension):
     
     @module_base.subcommand(
         "try_close_every_thread",
-        sub_cmd_description="設定無活躍的定義",
+        sub_cmd_description="手動嘗試關閉所有不活躍的討論串",
     )
     async def try_close_every_thread(self, ctx: SlashContext):
         console.log('try_close_every_thread')
@@ -140,7 +140,7 @@ class AutoClose(Extension):
                 console.log(f'processing thread: {thread}')
                 await self.try_close_thread(thread)
         
-    @Task.create(IntervalTrigger(minutes=5))
+    @Task.create(IntervalTrigger(seconds=5))
     async def on_every_five_minute(self):
         console.log('on_every_five_minute')
         await self.try_close_every_thread()
