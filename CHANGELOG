@@ -1,0 +1,12 @@
+# 20240422
+- Fix tag command.
+- Add MAX_MEMBER_PER_ROLE to config.
+- Update config command.
+
+# 20240406
+- Complete the first version.
+- Add tag_the_gossiper command.
+- Add judge check for all commands.
+- Fix config.json path with absolute path.
+- Use aiofiles to handle fp.
+- Clean comments and sign.
