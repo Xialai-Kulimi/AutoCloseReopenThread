@@ -162,6 +162,7 @@ class AutoClose(Extension):
 
     @listen(ExtensionLoad)
     async def on_load(self, event: ExtensionLoad):
+        await self.bot.wait_until_ready()
         if event.extension == self:
             console.log('on_load')
             self.on_every_five_minute.start()
