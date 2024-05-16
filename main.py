@@ -126,13 +126,15 @@ class AutoClose(Extension):
         
         
         
-        
         should_archive = False
-        if thread.last_message_id is None:
+        # alternative to fetch last_message_id
+        history = thread.history(limit=1)
+        # Flatten the async iterator into a list
+        messages = await history.flatten()
+        if len(messages) <= 0:
             should_archive = True
-        
-        if not should_archive:
-            last_message = thread.get_message(thread.last_message_id)
+        else:
+            last_message = messages[0]
             if last_message and last_message.timestamp:
                 last_active_time = last_message.timestamp.timestamp()
                 current_time = time()
