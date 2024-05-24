@@ -1,2 +1,5 @@
 # 20240512
 - complete.
+# 20240524
+- fix unexcept unpin inactive thread
+- add message delete listener
