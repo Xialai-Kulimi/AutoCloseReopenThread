@@ -26,7 +26,7 @@ from interactions import (
     IntervalTrigger,
     listen,
     ThreadChannel,
-    GuildPublicThread,
+    GuildForumPost,
     SlashContext,
     Permissions,
     slash_option,
@@ -111,15 +111,18 @@ class AutoClose(Extension):
         await ctx.respond(f"已設定，新的設定如下\n```py\n{config}\n```", ephemeral=True)
     
 
-    async def try_close_thread(self, thread: ThreadChannel):
+    async def try_close_thread(self, thread: GuildForumPost):
         console.log('try_close_thread')
-        if not isinstance(thread, GuildPublicThread):
+        if not isinstance(thread, GuildForumPost):
             return
         if thread.archived:
             console.log('thread is archived')
             return
         if thread.locked:
             console.log('thread is locked')
+            return
+        if thread.pinned:
+            console.log('thread is pinned')
             return
     
         config = await load_config(thread.parent_channel.guild.id)
