@@ -33,7 +33,7 @@ from interactions import (
     OptionType
 )
 from time import time
-from interactions.api.events import Startup, ThreadUpdate, ExtensionLoad
+from interactions.api.events import  ThreadUpdate, ExtensionLoad, MessageDelete
 from pydantic import BaseModel
 import aiofiles
 
@@ -180,3 +180,8 @@ class AutoClose(Extension):
     async def on_thread_update(self, event: ThreadUpdate):
         console.log('on_thread_update')
         await self.try_close_thread(event.thread)
+
+    @listen(MessageDelete)
+    async def on_message_delete(self, event: MessageDelete):
+        console.log('on_message_delete')
+        await self.try_close_thread(event.message.channel)
